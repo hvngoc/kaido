@@ -1,0 +1,235 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+appVersion = get_version_number(
+  xcodeproj: "Runner.xcodeproj",
+  target: "Runner"
+)
+
+appIconUrl = 'https://play-lh.googleusercontent.com/uke7S0iv79RewSZvbgllEpbfTV1PLTwnukmITNDgUvNGM9wgZkJPgM26usu0ukVBaJ0=s360-rw'
+
+googleChatWebHook = 'https://chat.googleapis.com/v1/spaces/AAAAfvarBTo/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9sgmYZp5kZBW9TTKGcCB55g4oR26utmrp8d3G2yLYvY%3D'
+
+jiraBoardUrl = "https://propzy.atlassian.net/secure/RapidBoard.jspa?rapidView=132"
+
+googleChatTitle = 'Version'
+
+googleChatButtonTitle = "OPEN DASHBOARD"
+
+googleChatBoxTitle = 'iOS Build Success'
+
+googleChatBoxTitleFailure = 'iOS Build Failure'
+googleChatBoxTitleTestsSuccess = 'iOS Test Success'
+
+path_to_tester = '../testers.txt'
+path_to_tester_group = '../testerGroups.txt'
+path_to_release_note = '../release-notes.txt'
+
+isExistFiles = File.exist?(path_to_tester) && File.exist?(path_to_tester_group) && File.exist?(path_to_release_note)
+
+iconErrorUrl = 'https://play-lh.googleusercontent.com/uke7S0iv79RewSZvbgllEpbfTV1PLTwnukmITNDgUvNGM9wgZkJPgM26usu0ukVBaJ0=s360-rw'
+
+branchName=`git name-rev --name-only HEAD`
+
+platform :ios do
+  desc "Description of what the lane does"
+  lane :custom_lane do
+    # add actions here: https://docs.fastlane.tools/actions
+  end
+
+  lane :checkExistFiles do
+    isExistFiles ? puts("200 TXTs Exist") : puts("404 TXTs not found")
+  end
+
+  lane :buildDevForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "ios", "--profile", "--flavor", "development", "-t", "lib/main_dev.dart", "--no-sound-null-safety")
+    end
+
+    gym(
+      scheme: "development",
+      export_method: "development",
+      include_bitcode: false,
+      configuration: "Profile-development",
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: false,
+        compileBitcode: false
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:281324893135:ios:299a4197d0de439f",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter iOS Propzy App on Dev server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+
+  lane :buildStagingForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "ios", "--profile", "--flavor", "uat", "-t", "lib/main_uat.dart", "--no-sound-null-safety")
+    end
+
+    gym(
+      scheme: "uat",
+      export_method: "development",
+      include_bitcode: false,
+      configuration: "Profile-uat",
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: false,
+        compileBitcode: false
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:281324893135:ios:299a4197d0de439f",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter iOS Propzy App on Staging server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  lane :buildPreProdForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "ios", "--profile", "--flavor", "preprod", "-t", "lib/main_preprod.dart", "--no-sound-null-safety")
+    end
+
+    gym(
+      scheme: "preprod",
+      export_method: "development",
+      include_bitcode: false,
+      configuration: "Profile-preprod",
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: false,
+        compileBitcode: false
+      }
+    )
+
+    firebase_app_distribution(
+      app: "1:281324893135:ios:299a4197d0de439f",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter iOS Propzy App on PreProd server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  lane :testGoogleChat do
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter iOS Propzy App' + " : " + appVersion,
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  lane :release do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "ios", "--flavor", "production", "-t", "lib/main_release.dart", "--no-sound-null-safety")
+    end
+
+    gym(
+      scheme: "production",
+      export_method: "app-store",
+      configuration: "Release-production",
+      include_bitcode: false,
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: false,
+        compileBitcode: false
+      }
+    )
+
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+
+  lane :buildReleaseOnly do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "ios", "--flavor", "production", "-t", "lib/main_release.dart", "--no-sound-null-safety")
+    end
+
+    gym(
+      scheme: "production",
+      export_method: "app-store",
+      configuration: "Release-production",
+      include_bitcode: false,
+      export_options: {
+        uploadBitcode: false,
+        uploadSymbols: false,
+        compileBitcode: false
+      }
+    )
+  end
+
+  lane :uploadAppStore do
+    upload_to_testflight(skip_waiting_for_build_processing: true)
+  end
+
+  # error do |ex|
+  #   google_chat(
+  #     imageUrl: iconErrorUrl,
+  #     webhook: googleChatWebHook,
+  #     title: googleChatBoxTitleFailure,
+  #     description: 'Branch: ' + branchName,
+  #     section1Title: googleChatTitle,
+  #     section1Description: appVersion,
+  #     buttonTitle: googleChatButtonTitle,
+  #     buttonUrl: jiraBoardUrl
+  #   )
+  # end
+
+end

@@ -1,0 +1,80 @@
+{
+  "project_info": {
+    "project_number": "281324893135",
+    "firebase_url": "https://propzy-sam.firebaseio.com",
+    "project_id": "propzy-sam",
+    "storage_bucket": "propzy-sam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281324893135:android:72e8c895da345223",
+        "android_client_info": {
+          "package_name": "vn.propzy.sam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281324893135-gasba0psn3h03p1tvbpsbsg7bgja44o2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.propzy.sam",
+            "certificate_hash": "637045409237cad6ebac080dc8ec33915f1203ea"
+          }
+        },
+        {
+          "client_id": "281324893135-glb0kll68ngnskj7dc2i7pun1un7m97r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.propzy.sam",
+            "certificate_hash": "ab618bd696eb7525026a651e1d751a6ab1ade08c"
+          }
+        },
+        {
+          "client_id": "281324893135-6k74frtr0lh5hekon6o55pbbeg6hiauu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.propzy.sam",
+            "certificate_hash": "a1a26800ec50b12dedf13c6b77e7fdcbc0c8089a"
+          }
+        },
+        {
+          "client_id": "281324893135-02svfsjga62m1iiinv4pm2nc3djjvm6s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.propzy.sam",
+            "certificate_hash": "59f94cad13a9325c572d3ac37c7f6f3d331926e5"
+          }
+        },
+        {
+          "client_id": "281324893135-qlhass7v6i6khal1cc70qu4ds34he1r0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBp8klWnJLKuNqppX-oU0GmdrYLt5wCCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281324893135-qlhass7v6i6khal1cc70qu4ds34he1r0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "281324893135-pc1rv58dhclmp3tg6lt6mvq41btlf2g9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "vn.propzy.PropzyApp",
+                "app_store_id": "1437366845"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

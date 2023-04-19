@@ -1,0 +1,15 @@
+Release note:
+    +++ +++ +++
+    
+User stories & Tasks & Bugs:
+    https://propzy.atlassian.net/jira/software/projects/APP/boards/132
+    
+Working items Today - Next release:
+    - fixing bugs
+
+Pending Items (not yet working):
+    - only bugs in queue
+
+Done items before:
+    - iOS version 2.9.3
+    - Android version 3.0.0

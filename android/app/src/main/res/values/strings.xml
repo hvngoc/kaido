@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name_dev">Propzy Dev</string>
+    <string name="app_name_uat">Propzy Uat</string>
+    <string name="app_name_training">Propzy Training</string>
+    <string name="app_name_preprod">Propzy Preprod</string>
+    <string name="app_name_release">Propzy</string>
+</resources>

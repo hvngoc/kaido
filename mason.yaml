@@ -1,0 +1,4 @@
+bricks:
+  bloc_page: ^0.2.0
+  cubit_page: ^0.2.0
+  json_dto: ^0.2.0

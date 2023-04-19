@@ -1,0 +1,157 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+appVersion = android_get_version_name()
+
+appIconUrl = 'https://play-lh.googleusercontent.com/uke7S0iv79RewSZvbgllEpbfTV1PLTwnukmITNDgUvNGM9wgZkJPgM26usu0ukVBaJ0=s360-rw'
+
+googleChatWebHook = 'https://chat.googleapis.com/v1/spaces/AAAAfvarBTo/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=9sgmYZp5kZBW9TTKGcCB55g4oR26utmrp8d3G2yLYvY%3D'
+
+jiraBoardUrl = "https://propzy.atlassian.net/secure/RapidBoard.jspa?rapidView=91"
+
+googleChatTitle = 'Version'
+
+googleChatButtonTitle = "OPEN DASHBOARD"
+
+googleChatBoxTitle = 'Android Build Success'
+
+googleChatBoxTitleFailure = 'Android Build Failure'
+googleChatBoxTitleTestsSuccess = 'Android Test Succeeded'
+
+iconErrorUrl = 'https://play-lh.googleusercontent.com/uke7S0iv79RewSZvbgllEpbfTV1PLTwnukmITNDgUvNGM9wgZkJPgM26usu0ukVBaJ0=s360-rw'
+
+branchName=`git name-rev --name-only HEAD`
+
+path_to_tester = '../testers.txt'
+path_to_tester_group = '../testerGroups.txt'
+path_to_release_note = '../release-notes.txt'
+
+platform :android do
+  lane :buildPreProdForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "apk", "--profile", "--flavor", "preprod", "-t", "lib/main_preprod.dart", "--no-sound-null-safety")
+    end
+
+    firebase_app_distribution(
+      app: "1:281324893135:android:72e8c895da345223",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note,
+      apk_path: "../build/app/outputs/flutter-apk/app-preprod-profile.apk",
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter Android Propzy App on PrePro server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  lane :buildDevForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "apk", "--profile", "--flavor", "development", "-t", "lib/main_dev.dart", "--no-sound-null-safety")
+    end
+
+    firebase_app_distribution(
+      app: "1:281324893135:android:72e8c895da345223",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note,
+      apk_path: "../build/app/outputs/flutter-apk/app-development-profile.apk",
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter Android Propzy App on Development server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  lane :buildStagingForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "apk", "--profile", "--flavor", "uat", "-t", "lib/main_uat.dart", "--no-sound-null-safety")
+    end
+
+    firebase_app_distribution(
+      app: "1:281324893135:android:72e8c895da345223",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note,
+      apk_path: "../build/app/outputs/flutter-apk/app-uat-profile.apk",
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter Android Propzy App on Staging server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  lane :buildProductionForQA do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "apk", "--flavor", "production", "-t", "lib/main_release.dart", "--no-sound-null-safety")
+    end
+
+    firebase_app_distribution(
+      app: "1:281324893135:android:72e8c895da345223",
+      testers_file: path_to_tester,
+      groups_file: path_to_tester_group,
+      release_notes_file: path_to_release_note,
+      apk_path: "../build/app/outputs/flutter-apk/app-production-release.apk",
+    )
+
+    google_chat(
+      imageUrl: appIconUrl,
+      webhook: googleChatWebHook,
+      title: googleChatBoxTitle,
+      description: 'Flutter Android Propzy App on Production server',
+      section1Title: googleChatTitle,
+      section1Description: appVersion,
+      buttonTitle: googleChatButtonTitle,
+      buttonUrl: jiraBoardUrl
+    )
+  end
+
+  # error do |ex|
+  #   google_chat(
+  #     imageUrl: iconErrorUrl,
+  #     webhook: googleChatWebHook,
+  #     title: googleChatBoxTitleFailure,
+  #     description: 'Branch: ' + branchName,
+  #     section1Title: googleChatTitle,
+  #     section1Description: appVersion,
+  #     buttonTitle: googleChatButtonTitle,
+  #     buttonUrl: jiraBoardUrl
+  #   )
+  # end
+
+end
